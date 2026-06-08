@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="SkyRoute.Api.Tests/SkyRoute.Api.Tests.csproj" />
+  <Project Path="SkyRoute.Api/SkyRoute.Api.csproj" />
+</Solution>
