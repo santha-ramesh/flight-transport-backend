@@ -32,20 +32,19 @@ Out of Scope:
 
 ## Frontend
 
-* Angular 18+
+* Angular 18
 * TypeScript
 * Angular Reactive Forms
 * Angular Router
 * RxJS
-* SCSS
 
 ## Backend
 
 * .NET 10 Web API
 * ASP.NET Core
 * Dependency Injection
-* Swagger/OpenAPI
-* MSTest (optional for unit tests)
+* Swagger
+* MSTest (for unit tests)
 
 ---
 
@@ -716,55 +715,7 @@ All date and time values use **ISO 8601 UTC format**: `YYYY-MM-DDTHH:mm:ssZ`
 
 ---
 
-# 23. Provider Retry Mechanism (Implementation Details)
-
-## Configuration
-
-Implementation uses **Polly** NuGet package for resilience patterns.
-
-| Parameter | Value | Rationale |
-| --- | --- | --- |
-| Max Retries | 3 | Allow recovery from transient failures |
-| Initial Delay | 100ms | Quick first retry |
-| Max Delay | 1000ms | Cap backoff to 1 second |
-| Backoff Multiplier | 2x | Exponential growth |
-| Jitter | ±20% random | Prevent thundering herd |
-
-## Retry Sequence
-
-**Attempt 1:** Immediate (0ms delay)
-
-**Attempt 2:** 100ms ± jitter (±20ms)
-
-**Attempt 3:** 200ms ± jitter (±40ms)
-
-**Attempt 4:** 400ms ± jitter (±80ms) → Max 1000ms
-
-**Total Max Time Per Provider:** ~1.5 seconds
-
-## Retry Logic
-
-**Retry ON:**
-- Timeout (>1.5 seconds)
-- HTTP 5xx errors (500, 502, 503, 504)
-- Network connection errors
-- Task cancellation
-
-**NO Retry ON:**
-- HTTP 4xx errors (400, 401, 403, 404)
-- Validation errors from provider
-- Business logic errors
-
-## Aggregation Strategy
-
-- **Execution:** All providers execute concurrently (not sequentially)
-- **Wait for:** All providers complete OR overall timeout (~2 seconds)
-- **Result:** If ANY provider succeeds, return aggregated flights
-- **All Fail:** Return HTTP 503 "No providers available at this time"
-- **Partial Failure:** Return flights from successful providers + log failures
----
-
-# 24. Assumptions
+# 23. Assumptions
 
 1. Single passenger information represents booking owner.
 2. Passenger count applies to identical pricing.
@@ -775,15 +726,12 @@ Implementation uses **Polly** NuGet package for resilience patterns.
 7. Mock providers generate in-memory data.
 8. All times handled in UTC internally; frontend responsible for timezone display.
 
-# 26. Acceptance Criteria
+# 24. Acceptance Criteria
 
 The implementation is complete when:
 
 * Flight search returns aggregated provider results from all concurrent providers.
-* Composite + Adapter pattern is implemented for provider management.
-* Retry logic with exponential backoff is applied per provider via Adapter wrapper.
-* Concurrent execution ensures all providers run simultaneously, not sequentially.
-* Partial failure resilience: if any provider succeeds, return its results.
+* strategy pattern and service layer is implemented for future extension of providers.
 * Provider pricing rules are correctly applied.
 * Total and per-passenger pricing are visible.
 * Sorting occurs client-side only.
@@ -794,4 +742,4 @@ The implementation is complete when:
 * All dates/times use UTC format consistently.
 * Application runs locally via Angular + .NET.
 * Swagger documentation is available.
-* Code follows Composite+Adapter architecture described in this specification.
+* Code follows architecture described in this specification.
