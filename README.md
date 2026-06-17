@@ -40,9 +40,9 @@ frontend/
 docs/
 
 ## Tech Stack
-- .NET 8
+- .NET 10
 - ASP.NET Core Web API
-- Angular 19
+- Angular 18
 - MSTest
 
 
