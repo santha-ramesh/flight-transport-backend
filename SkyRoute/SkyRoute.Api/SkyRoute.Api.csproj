@@ -7,24 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.8" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Bookings\Controllers\" />
-    <Folder Include="Bookings\Models\" />
-    <Folder Include="Bookings\Contracts\" />
-    <Folder Include="Bookings\Services\Interfaces\" />
-    <Folder Include="Bookings\Validators\" />
     <Folder Include="Controllers\" />
     <Folder Include="Flights\Interfaces\" />
     <Folder Include="Flights\Validators\" />
-    <Folder Include="Middleware\" />
     <Folder Include="Pricing\PricingRules\" />
     <Folder Include="Providers\Models\" />
     <Folder Include="Shared\Constants\" />
-    <Folder Include="Shared\Helpers\" />
   </ItemGroup>
 
 </Project>
